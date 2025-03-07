@@ -1,0 +1,62 @@
+{
+    "name": "ipleiria/dbcontextseeder",
+    "description": "",
+    "keywords": [
+        "ipleiria",
+        "dbcontextseeder",
+        "seeders",
+        "database"
+    ],
+    "homepage": "https://github.com/ipleiria/dbcontextseeder",
+    "license": "GPL-2.0-or-later",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Álvaro Miguel Ribeiro Alves",
+            "email": "2191792@my.ipleiria.pt",
+            "role": "Developer"
+        },
+        {
+            "name": "Luís Henrique Alves Palma",
+            "email": "2221434@my.ipleiria.pt",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/support": "^8.0",
+        "fakerphp/faker": "^1.24.1"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "IPLeiria\\ESTG\\EI\\DBContextSeeder\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IPLeiria\\ESTG\\EI\\DBContextSeeder\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "IPLeiria\\ESTG\\EI\\DBContextSeeder\\DBContextSeederServiceProvider"
+            ],
+            "aliases": {
+                "DBContextSeeder": "IPLeiria\\ESTG\\EI\\DBContextSeeder\\DBContextSeederFacade"
+            }
+        }
+    }
+}
