@@ -32,7 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "IPLeiria\\ESTG\\EI\\DBContextSeeder\\": "src"
+            "IPLeiria\\ESTG\\EI\\DBContextSeeder\\": "src/IPLeiria/ESTG/EI/DBContextSeeder"
         }
     },
     "autoload-dev": {
