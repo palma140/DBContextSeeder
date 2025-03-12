@@ -22,7 +22,7 @@ class FieldSeeder
         }
     }
 
-    public function randomName(): static
+    public function name(): static
     {
         $this->generator = function () {
             return self::$faker->name();
@@ -30,7 +30,7 @@ class FieldSeeder
         return $this;
     }
 
-    public function randomEmail(): static
+    public function email(): static
     {
         $this->generator = function () {
             if ($this->unique) {
@@ -41,7 +41,7 @@ class FieldSeeder
         return $this;
     }
 
-    public function randomAddress() : static
+    public function address() : static
     {
         $this->generator = function () {
             if ($this->unique) {
