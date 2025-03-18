@@ -3,6 +3,7 @@
 namespace IPLeiria\ESTG\EI\DBContextSeeder;
 
 use Faker\Factory as Faker;
+use InvalidArgumentException;
 
 class FieldSeeder
 {
@@ -95,13 +96,25 @@ class FieldSeeder
         return $this;
     }
 
-    public function password(): static
+    public function password(string $algorithm = 'bcrypt'): static
     {
-        $this->generator = function () {
-            return self::$faker->password();
+        $this->generator = function () use ($algorithm) {
+            $password = self::$faker->password();
+
+            return match ($algorithm) {
+                'bcrypt' => password_hash($password, PASSWORD_BCRYPT),
+                'argon2i' => password_hash($password, PASSWORD_ARGON2I),
+                'argon2id' => password_hash($password, PASSWORD_ARGON2ID),
+                'md5' => md5($password),
+                'sha1' => sha1($password),
+                'sha256' => hash('sha256', $password),
+                default => throw new InvalidArgumentException("Invalid hash algorithm: {$algorithm}"),
+            };
         };
+
         return $this;
     }
+
 
     public function ipAddress(): static
     {
