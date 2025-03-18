@@ -10,7 +10,7 @@ class TableSeeder
     protected $fields = [];
     protected $language;
 
-    public function __construct($table, $language = "en_US") {
+    public function __construct($table, $language) {
         $this->table = $table;
         $this->language = $language;
     }

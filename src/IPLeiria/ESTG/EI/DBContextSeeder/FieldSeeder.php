@@ -2,7 +2,8 @@
 
 namespace IPLeiria\ESTG\EI\DBContextSeeder;
 
-use faker\Factory as Faker;
+use Faker\Factory as Faker;
+
 class FieldSeeder
 {
     protected $tableSeeder;
@@ -33,23 +34,80 @@ class FieldSeeder
     public function email(): static
     {
         $this->generator = function () {
-            if ($this->unique) {
-                return self::$faker->unique()->email();
-            }
-            return self::$faker->email();
+            return $this->unique ? self::$faker->unique()->email() : self::$faker->email();
         };
         return $this;
     }
 
-    public function address() : static
+    public function address(): static
     {
         $this->generator = function () {
-            if ($this->unique) {
-                return self::$faker->unique()->address();
-            }
-            return self::$faker->address();
+            return $this->unique ? self::$faker->unique()->address() : self::$faker->address();
         };
+        return $this;
+    }
 
+    public function phoneNumber(): static
+    {
+        $this->generator = function () {
+            return self::$faker->phoneNumber();
+        };
+        return $this;
+    }
+
+    public function company(): static
+    {
+        $this->generator = function () {
+            return self::$faker->company();
+        };
+        return $this;
+    }
+
+    public function city(): static
+    {
+        $this->generator = function () {
+            return self::$faker->city();
+        };
+        return $this;
+    }
+
+    public function country(): static
+    {
+        $this->generator = function () {
+            return self::$faker->country();
+        };
+        return $this;
+    }
+
+    public function dateOfBirth(): static
+    {
+        $this->generator = function () {
+            return self::$faker->date();
+        };
+        return $this;
+    }
+
+    public function username(): static
+    {
+        $this->generator = function () {
+            return self::$faker->userName();
+        };
+        return $this;
+    }
+
+    public function password(): static
+    {
+        $this->generator = function () {
+            return self::$faker->password();
+        };
+        return $this;
+    }
+
+    public function ipAddress(): static
+    {
+        $this->generator = function () {
+            return self::$faker->ipv4();
+        };
         return $this;
     }
 
