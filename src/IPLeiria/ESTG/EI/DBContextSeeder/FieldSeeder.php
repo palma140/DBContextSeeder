@@ -91,7 +91,7 @@ class FieldSeeder
     public function username(): static
     {
         $this->generator = function () {
-            return self::$faker->userName();
+            return $this->unique ? self::$faker->unique()->userName() : self::$faker->userName();
         };
         return $this;
     }
