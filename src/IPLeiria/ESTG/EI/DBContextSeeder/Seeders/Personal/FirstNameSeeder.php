@@ -13,12 +13,13 @@ class FirstNameSeeder extends FieldSeeder
         parent::__construct($tableSeeder, $field, $language);
         $this->gender = $gender;
     }
-
     public function generateValue(): string
     {
-        if ($this->unique) {
-            return self::$faker->unique()->firstName($this->gender);
+        if (FullNameSeeder::$lastGeneratedName) {
+            $nameParts = explode(' ', FullNameSeeder::$lastGeneratedName, 2);
+            return $nameParts[0]; // Primeiro nome
         }
-        return self::$faker->firstName($this->gender);
+
+        return $this->unique ? self::$faker->unique()->firstName($this->gender) : self::$faker->firstName($this->gender);
     }
 }

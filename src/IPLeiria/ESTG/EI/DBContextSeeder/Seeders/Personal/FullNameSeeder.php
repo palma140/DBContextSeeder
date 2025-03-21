@@ -6,8 +6,14 @@ use IPLeiria\ESTG\EI\DBContextSeeder\FieldSeeder;
 
 class FullNameSeeder extends FieldSeeder
 {
+    public static ?string $lastGeneratedName = null;
+
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->name() : self::$faker->name();
+        self::$lastGeneratedName = $this->unique
+            ? self::$faker->unique()->name()
+            : self::$faker->name();
+
+        return self::$lastGeneratedName;
     }
 }
