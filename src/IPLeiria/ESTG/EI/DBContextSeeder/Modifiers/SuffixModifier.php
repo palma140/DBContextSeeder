@@ -11,7 +11,7 @@ class SuffixModifier implements Modifier
         $this->suffix = $suffix;
     }
 
-    public function apply(mixed $value): mixed
+    public function apply(mixed $value): string
     {
         return $value . $this->suffix;
     }
