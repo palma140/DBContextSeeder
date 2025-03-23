@@ -13,7 +13,7 @@ class HashModifier implements Modifier
         $this->algorithm = $algorithm;
     }
 
-    public function apply(mixed $value): mixed
+    public function apply(mixed $value): string
     {
         return match ($this->algorithm) {
             HashAlgorithm::BCRYPT => password_hash($value, PASSWORD_BCRYPT),
