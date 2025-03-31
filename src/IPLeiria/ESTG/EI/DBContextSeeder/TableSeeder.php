@@ -56,8 +56,6 @@ use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Text\BothifySeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Text\LetterSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Text\LexifySeeder;
 
-require_once 'Seeders/Seeders.php';
-
 class TableSeeder
 {
     protected string $table;
@@ -87,7 +85,7 @@ class TableSeeder
 
     public function country(string $field): FieldSeeder
     {
-        return $this->addField($field, new StreetAddressSeeder($this, $field, $this->language));
+        return $this->addField($field, new CountrySeeder($this, $field, $this->language));
     }
 
     public function firstname(string $field, ?string $gender): FieldSeeder

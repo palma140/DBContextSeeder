@@ -5,15 +5,34 @@ namespace IPLeiria\ESTG\EI\DBContextSeeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class TablePopulate
+ *
+ * This class is responsible for populating a database table using a given TableSeeder.
+ */
 class TablePopulate
 {
+    /** @var TableSeeder The seeder instance used to generate table data */
     protected TableSeeder $seeder;
 
+    /**
+     * TablePopulate constructor.
+     *
+     * @param TableSeeder $seeder The seeder instance to use for data generation.
+     */
     public function __construct(TableSeeder $seeder)
     {
         $this->seeder = $seeder;
     }
 
+    /**
+     * Populates the table with a given number of records.
+     *
+     * @param int $count The total number of records to insert.
+     * @param int $batchSize The number of records to insert per batch (default: 1000).
+     *
+     * @return void
+     */
     public function populate(int $count, int $batchSize = 1000): void
     {
         try {
@@ -44,6 +63,4 @@ class TablePopulate
             echo "\e[31m❌ Error: {$e->getMessage()}\e[0m\n";
         }
     }
-
-
 }

@@ -4,15 +4,35 @@ namespace IPLeiria\ESTG\EI\DBContextSeeder\Modifiers;
 
 use IPLeiria\ESTG\EI\DBContextSeeder\Enums\HashAlgorithm;
 
+/**
+ * Class HashModifier
+ *
+ * This class is responsible for applying different hashing algorithms
+ * to a given value based on the specified HashAlgorithm.
+ */
 class HashModifier implements Modifier
 {
+    /**
+     * @var HashAlgorithm The hashing algorithm to use.
+     */
     protected HashAlgorithm $algorithm;
 
+    /**
+     * HashModifier constructor.
+     *
+     * @param HashAlgorithm $algorithm The algorithm to be used for hashing.
+     */
     public function __construct(HashAlgorithm $algorithm)
     {
         $this->algorithm = $algorithm;
     }
 
+    /**
+     * Applies the selected hashing algorithm to the given value.
+     *
+     * @param mixed $value The value to be hashed.
+     * @return string The hashed value.
+     */
     public function apply(mixed $value): string
     {
         return match ($this->algorithm) {
