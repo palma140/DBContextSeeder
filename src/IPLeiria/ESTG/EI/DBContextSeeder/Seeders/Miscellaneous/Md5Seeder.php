@@ -8,6 +8,6 @@ class Md5Seeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->md5() : self::$faker->md5();
+        return $this->isUnique() ? self::$faker->unique()->md5() : self::$faker->md5();
     }
 }

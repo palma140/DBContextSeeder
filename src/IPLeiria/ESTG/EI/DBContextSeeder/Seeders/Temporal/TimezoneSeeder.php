@@ -8,6 +8,6 @@ class TimezoneSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->timezone() : self::$faker->timezone();
+        return $this->isUnique() ? self::$faker->unique()->timezone() : self::$faker->timezone();
     }
 }

@@ -8,6 +8,6 @@ class CitySeeder extends FieldSeeder
 {
     public function generateValue() : string
     {
-       return $this->unique ? self::$faker->unique()->city() : self::$faker->city();
+       return $this->isUnique() ? self::$faker->unique()->city() : self::$faker->city();
     }
 }

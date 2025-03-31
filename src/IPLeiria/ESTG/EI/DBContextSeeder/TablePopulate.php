@@ -17,7 +17,9 @@ class TablePopulate
     public function populate(int $count, int $batchSize = 1000): void
     {
         try {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             DB::table($this->seeder->getTable())->truncate();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
             echo "\e[33m⚠️ Table truncated: {$this->seeder->getTable()}.\e[0m\n";
 
             $fields = $this->seeder->getFields();

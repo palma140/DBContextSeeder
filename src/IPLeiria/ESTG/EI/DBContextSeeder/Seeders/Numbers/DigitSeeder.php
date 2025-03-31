@@ -17,6 +17,6 @@ class DigitSeeder extends FieldSeeder
 
     public function generateValue(): int
     {
-        return $this->unique ? self::$faker->unique()->randomDigit() : self::$faker->randomDigit();
+        return $this->isUnique() ? self::$faker->unique()->randomDigit() : self::$faker->randomDigit();
     }
 }

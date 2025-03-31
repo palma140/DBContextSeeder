@@ -19,6 +19,6 @@ class NumberSeeder extends FieldSeeder
 
     public function generateValue(): int
     {
-        return $this->unique ? self::$faker->unique()->randomNumber($this->nbDigits, $this->strict) : self::$faker->randomNumber($this->nbDigits, $this->strict);
+        return $this->isUnique() ? self::$faker->unique()->randomNumber($this->nbDigits, $this->strict) : self::$faker->randomNumber($this->nbDigits, $this->strict);
     }
 }

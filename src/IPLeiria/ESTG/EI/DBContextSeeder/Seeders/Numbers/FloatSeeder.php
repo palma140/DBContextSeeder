@@ -21,6 +21,6 @@ class FloatSeeder extends FieldSeeder
 
     public function generateValue(): int
     {
-        return $this->unique ? self::$faker->unique()->randomFloat($this->nbMaxDecimals, $this->min, $this->max) : self::$faker->randomFloat($this->nbMaxDecimals, $this->min, $this->max);
+        return $this->isUnique() ? self::$faker->unique()->randomFloat($this->nbMaxDecimals, $this->min, $this->max) : self::$faker->randomFloat($this->nbMaxDecimals, $this->min, $this->max);
     }
 }

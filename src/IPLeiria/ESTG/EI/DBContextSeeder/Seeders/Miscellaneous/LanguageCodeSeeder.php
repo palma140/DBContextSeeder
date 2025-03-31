@@ -8,6 +8,6 @@ class LanguageCodeSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->languageCode() : self::$faker->languageCode();
+        return $this->isUnique() ? self::$faker->unique()->languageCode() : self::$faker->languageCode();
     }
 }

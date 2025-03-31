@@ -8,6 +8,6 @@ class StreetSuffixSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->streetSuffix() : self::$faker->streetSuffix();
+        return $this->isUnique() ? self::$faker->unique()->streetSuffix() : self::$faker->streetSuffix();
     }
 }

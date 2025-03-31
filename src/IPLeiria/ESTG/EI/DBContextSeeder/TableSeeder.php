@@ -20,12 +20,14 @@ use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Internet\Ipv6Seeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Internet\LocalIpv4Seeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Internet\MacAddressSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Internet\UrlSeeder;
+use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\ArraySeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\BooleanSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\EmojiSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\LanguageCodeSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\Md5Seeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\Sha1Seeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\Sha256Seeder;
+use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\SqlSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\ValueSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\WeightValuesSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Numbers\DigitNotNullSeeder;
@@ -309,6 +311,16 @@ class TableSeeder
     public function value(string $field, mixed $value): FieldSeeder
     {
         return $this->addField($field, new ValueSeeder($this, $field, $value));
+    }
+
+    public function array(string $field, array $value): FieldSeeder
+    {
+        return $this->addField($field, new ArraySeeder($this, $field, $value));
+    }
+
+    public function sql(string $field, string $query, array $bindings): FieldSeeder
+    {
+        return $this->addField($field, new SqlSeeder($this, $field, $query, $bindings));
     }
 
     private function addField(string $field, FieldSeeder $seeder): FieldSeeder

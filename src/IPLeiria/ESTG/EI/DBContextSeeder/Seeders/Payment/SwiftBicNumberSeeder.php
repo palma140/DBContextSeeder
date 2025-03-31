@@ -8,6 +8,6 @@ class SwiftBicNumberSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->swiftBicNumber() : self::$faker->swiftBicNumber();
+        return $this->isUnique() ? self::$faker->unique()->swiftBicNumber() : self::$faker->swiftBicNumber();
     }
 }

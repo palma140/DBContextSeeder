@@ -8,6 +8,6 @@ class PostcodeSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->postcode() : self::$faker->postcode();
+        return $this->isUnique() ? self::$faker->unique()->postcode() : self::$faker->postcode();
     }
 }

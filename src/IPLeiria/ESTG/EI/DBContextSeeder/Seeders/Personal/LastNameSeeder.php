@@ -20,6 +20,6 @@ class LastNameSeeder extends FieldSeeder
             return end($nameParts); // Último nome
         }
 
-        return $this->unique ? self::$faker->unique()->lastName() : self::$faker->lastName();
+        return $this->isUnique() ? self::$faker->unique()->lastName() : self::$faker->lastName();
     }
 }

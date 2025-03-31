@@ -10,7 +10,7 @@ class FullNameSeeder extends FieldSeeder
 
     public function generateValue(): string
     {
-        self::$lastGeneratedName = $this->unique
+        self::$lastGeneratedName = $this->isUnique()
             ? self::$faker->unique()->name()
             : self::$faker->name();
 

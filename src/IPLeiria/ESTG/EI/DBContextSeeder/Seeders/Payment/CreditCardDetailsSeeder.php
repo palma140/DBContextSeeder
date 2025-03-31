@@ -17,6 +17,6 @@ class CreditCardDetailsSeeder extends FieldSeeder
 
     public function generateValue(): array
     {
-        return $this->unique ? self::$faker->unique()->creditCardDetails($this->valid) : self::$faker->creditCardDetails($this->valid);
+        return $this->isUnique() ? self::$faker->unique()->creditCardDetails($this->valid) : self::$faker->creditCardDetails($this->valid);
     }
 }

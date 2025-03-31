@@ -8,6 +8,6 @@ class Sha256Seeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->sha256() : self::$faker->sha256();
+        return $this->isUnique() ? self::$faker->unique()->sha256() : self::$faker->sha256();
     }
 }

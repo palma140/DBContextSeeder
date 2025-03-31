@@ -8,6 +8,6 @@ class DigitNotNullSeeder extends FieldSeeder
 {
     public function generateValue(): int
     {
-        return $this->unique ? self::$faker->unique()->randomDigitNotNull() : self::$faker->randomDigitNotNull();
+        return $this->isUnique() ? self::$faker->unique()->randomDigitNotNull() : self::$faker->randomDigitNotNull();
     }
 }

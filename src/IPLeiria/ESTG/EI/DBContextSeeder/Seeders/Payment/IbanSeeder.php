@@ -22,6 +22,6 @@ class IbanSeeder extends FieldSeeder
 
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->iban($this->countryCode, $this->prefix, $this->length) : self::$faker->iban($this->countryCode, $this->prefix, $this->length);
+        return $this->isUnique() ? self::$faker->unique()->iban($this->countryCode, $this->prefix, $this->length) : self::$faker->iban($this->countryCode, $this->prefix, $this->length);
     }
 }

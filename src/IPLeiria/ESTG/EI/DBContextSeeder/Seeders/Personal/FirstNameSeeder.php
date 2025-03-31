@@ -20,6 +20,6 @@ class FirstNameSeeder extends FieldSeeder
             return $nameParts[0]; // Primeiro nome
         }
 
-        return $this->unique ? self::$faker->unique()->firstName($this->gender) : self::$faker->firstName($this->gender);
+        return $this->isUnique() ? self::$faker->unique()->firstName($this->gender) : self::$faker->firstName($this->gender);
     }
 }

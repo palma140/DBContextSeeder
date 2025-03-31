@@ -8,6 +8,6 @@ class StreetAddressSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->streetAddress() : self::$faker->streetAddress();
+        return $this->isUnique() ? self::$faker->unique()->streetAddress() : self::$faker->streetAddress();
     }
 }

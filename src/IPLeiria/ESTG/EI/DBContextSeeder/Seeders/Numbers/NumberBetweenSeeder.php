@@ -18,6 +18,6 @@ class NumberBetweenSeeder extends FieldSeeder
 
     public function generateValue(): int
     {
-        return $this->unique ? self::$faker->unique()->numberBetween($this->min, $this->max) : self::$faker->randomNumber($this->min, $this->max);
+        return $this->isUnique() ? self::$faker->unique()->numberBetween($this->min, $this->max) : self::$faker->randomNumber($this->min, $this->max);
     }
 }

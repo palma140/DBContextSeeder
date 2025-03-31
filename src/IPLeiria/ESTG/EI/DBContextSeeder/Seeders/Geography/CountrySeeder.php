@@ -8,6 +8,6 @@ class CountrySeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->country() : self::$faker->country();
+        return $this->isUnique() ? self::$faker->unique()->country() : self::$faker->country();
     }
 }

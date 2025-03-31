@@ -8,6 +8,6 @@ class EmojiSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->emoji() : self::$faker->emoji();
+        return $this->isUnique() ? self::$faker->unique()->emoji() : self::$faker->emoji();
     }
 }

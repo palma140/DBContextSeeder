@@ -8,6 +8,6 @@ class LetterSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->randomLetter() : self::$faker->randomLetter();
+        return $this->isUnique() ? self::$faker->unique()->randomLetter() : self::$faker->randomLetter();
     }
 }

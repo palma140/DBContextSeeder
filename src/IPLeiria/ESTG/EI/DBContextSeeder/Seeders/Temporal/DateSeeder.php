@@ -20,7 +20,7 @@ class DateSeeder extends FieldSeeder
 
     public function generateValue(): string
     {
-        $date = $this->unique
+        $date = $this->isUnique()
             ? self::$faker->unique()->dateTimeBetween($this->startDate, $this->endDate)
             : self::$faker->dateTimeBetween($this->startDate, $this->endDate);
 

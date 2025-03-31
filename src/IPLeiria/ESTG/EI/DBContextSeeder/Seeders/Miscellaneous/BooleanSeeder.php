@@ -17,6 +17,6 @@ class BooleanSeeder extends FieldSeeder
 
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->boolean($this->chanceOfGettingTrue) : self::$faker->boolean($this->chanceOfGettingTrue);
+        return $this->isUnique() ? self::$faker->unique()->boolean($this->chanceOfGettingTrue) : self::$faker->boolean($this->chanceOfGettingTrue);
     }
 }

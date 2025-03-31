@@ -8,6 +8,6 @@ class PhoneNumberSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->phoneNumber() : self::$faker->phoneNumber();
+        return $this->isUnique() ? self::$faker->unique()->phoneNumber() : self::$faker->phoneNumber();
     }
 }

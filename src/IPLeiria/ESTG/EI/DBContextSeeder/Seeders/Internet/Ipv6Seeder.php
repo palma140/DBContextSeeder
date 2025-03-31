@@ -8,6 +8,6 @@ class Ipv6Seeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->ipv6() : self::$faker->ipv6();
+        return $this->isUnique() ? self::$faker->unique()->ipv6() : self::$faker->ipv6();
     }
 }

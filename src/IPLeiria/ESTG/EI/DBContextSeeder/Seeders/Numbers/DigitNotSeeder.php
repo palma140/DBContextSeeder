@@ -17,6 +17,6 @@ class DigitNotSeeder extends FieldSeeder
 
     public function generateValue(): int
     {
-        return $this->unique ? self::$faker->unique()->randomDigitNot($this->value) : self::$faker->randomDigitNot($this->value);
+        return $this->isUnique() ? self::$faker->unique()->randomDigitNot($this->value) : self::$faker->randomDigitNot($this->value);
     }
 }

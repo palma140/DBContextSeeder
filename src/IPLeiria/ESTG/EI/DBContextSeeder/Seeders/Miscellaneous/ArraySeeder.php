@@ -16,7 +16,7 @@ class ArraySeeder extends FieldSeeder
 
     public function generateValue(): mixed
     {
-        return $this->unique
+        return $this->isUnique()
             ? self::$faker->unique()->randomElement($this->values)
             : self::$faker->randomElement($this->values);
     }

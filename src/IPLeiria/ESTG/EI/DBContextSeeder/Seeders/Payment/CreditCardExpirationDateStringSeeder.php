@@ -17,6 +17,6 @@ class CreditCardExpirationDateStringSeeder extends FieldSeeder
 
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->creditCardExpirationDateString($this->valid) : self::$faker->creditCardExpirationDateString($this->valid);
+        return $this->isUnique() ? self::$faker->unique()->creditCardExpirationDateString($this->valid) : self::$faker->creditCardExpirationDateString($this->valid);
     }
 }

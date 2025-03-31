@@ -8,6 +8,6 @@ class CompanySeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->company() : self::$faker->company();
+        return $this->isUnique() ? self::$faker->unique()->company() : self::$faker->company();
     }
 }

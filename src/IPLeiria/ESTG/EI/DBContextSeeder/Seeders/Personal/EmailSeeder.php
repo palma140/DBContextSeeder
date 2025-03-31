@@ -8,6 +8,6 @@ class EmailSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->email() : self::$faker->email();
+        return $this->isUnique() ? self::$faker->unique()->email() : self::$faker->email();
     }
 }

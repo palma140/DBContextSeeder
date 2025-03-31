@@ -8,6 +8,6 @@ class CreditCardNumberSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->creditCardNumber() : self::$faker->creditCardNumber();
+        return $this->isUnique() ? self::$faker->unique()->creditCardNumber() : self::$faker->creditCardNumber();
     }
 }

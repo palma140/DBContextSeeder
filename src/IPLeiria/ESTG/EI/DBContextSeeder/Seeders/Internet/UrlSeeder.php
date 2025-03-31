@@ -8,6 +8,6 @@ class UrlSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->url() : self::$faker->url();
+        return $this->isUnique() ? self::$faker->unique()->url() : self::$faker->url();
     }
 }

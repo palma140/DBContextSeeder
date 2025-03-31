@@ -8,6 +8,6 @@ class LatitudeSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->latitude() : self::$faker->latitude();
+        return $this->isUnique() ? self::$faker->unique()->latitude() : self::$faker->latitude();
     }
 }

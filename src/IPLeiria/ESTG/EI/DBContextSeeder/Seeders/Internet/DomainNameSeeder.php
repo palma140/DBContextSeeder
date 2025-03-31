@@ -8,6 +8,6 @@ class DomainNameSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->domainName() : self::$faker->domainWord();
+        return $this->isUnique() ? self::$faker->unique()->domainName() : self::$faker->domainWord();
     }
 }

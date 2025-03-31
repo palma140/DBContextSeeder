@@ -8,6 +8,6 @@ class LocaleSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->locale() : self::$faker->locale();
+        return $this->isUnique() ? self::$faker->unique()->locale() : self::$faker->locale();
     }
 }

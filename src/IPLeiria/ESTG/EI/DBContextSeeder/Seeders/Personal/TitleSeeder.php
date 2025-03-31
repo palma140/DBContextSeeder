@@ -8,6 +8,6 @@ class TitleSeeder extends FieldSeeder
 {
     public function generateValue(): string
     {
-        return $this->unique ? self::$faker->unique()->title() : self::$faker->title();
+        return $this->isUnique() ? self::$faker->unique()->title() : self::$faker->title();
     }
 }
