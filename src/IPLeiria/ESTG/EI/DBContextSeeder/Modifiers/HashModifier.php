@@ -16,6 +16,7 @@ class HashModifier implements Modifier
      * @var HashAlgorithm The hashing algorithm to use.
      */
     protected HashAlgorithm $algorithm;
+    private array $cache = [];
 
     /**
      * HashModifier constructor.
@@ -35,7 +36,11 @@ class HashModifier implements Modifier
      */
     public function apply(mixed $value): string
     {
-        return match ($this->algorithm) {
+        if(isset($this->cache[$value])) {
+            return $this->cache[$value];
+        }
+
+        $hash = match ($this->algorithm) {
             HashAlgorithm::BCRYPT => password_hash($value, PASSWORD_BCRYPT),
             HashAlgorithm::ARGON2I => password_hash($value, PASSWORD_ARGON2I),
             HashAlgorithm::ARGON2ID => password_hash($value, PASSWORD_ARGON2ID),
@@ -43,5 +48,9 @@ class HashModifier implements Modifier
             HashAlgorithm::SHA1 => sha1($value),
             HashAlgorithm::SHA256 => hash('sha256', $value),
         };
+
+        $this->cache[$value] = $hash;
+
+        return $hash;
     }
 }
