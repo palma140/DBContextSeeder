@@ -6,14 +6,22 @@ namespace IPLeiria\ESTG\EI\DBContextSeeder\Modifiers;
  * Class PrefixModifier
  *
  * A modifier that prepends a specified prefix to a given value.
+ *
+ * @package IPLeiria\ESTG\EI\DBContextSeeder\Modifiers
  */
 class PrefixModifier implements Modifier
 {
-    /** @var string The prefix to be added to the value. */
+    /**
+     * The prefix to be added to the value.
+     *
+     * @var string
+     */
     protected string $prefix;
 
     /**
      * PrefixModifier constructor.
+     *
+     * Initializes the modifier with a specified prefix to prepend to values.
      *
      * @param string $prefix The prefix to prepend to the value.
      */
@@ -25,10 +33,12 @@ class PrefixModifier implements Modifier
     /**
      * Applies the prefix modification to the given value.
      *
-     * @param mixed $value The input value.
-     * @return mixed The value with the prefix applied.
+     * This method prepends the specified prefix to the given value.
+     *
+     * @param mixed $value The input value to which the prefix will be applied.
+     * @return string The value with the prefix applied.
      */
-    public function apply(mixed $value): mixed
+    public function apply(mixed $value): string
     {
         return $this->prefix . $value;
     }

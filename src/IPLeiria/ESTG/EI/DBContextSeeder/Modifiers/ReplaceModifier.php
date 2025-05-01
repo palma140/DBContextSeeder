@@ -6,17 +6,29 @@ namespace IPLeiria\ESTG\EI\DBContextSeeder\Modifiers;
  * Class ReplaceModifier
  *
  * A modifier that replaces occurrences of a specified substring within a value.
+ *
+ * @package IPLeiria\ESTG\EI\DBContextSeeder\Modifiers
  */
 class ReplaceModifier implements Modifier
 {
-    /** @var string The substring to search for. */
+    /**
+     * The substring to search for and replace.
+     *
+     * @var string
+     */
     protected string $search;
 
-    /** @var string The replacement substring. */
+    /**
+     * The replacement substring.
+     *
+     * @var string
+     */
     protected string $replace;
 
     /**
      * ReplaceModifier constructor.
+     *
+     * Initializes the modifier with a substring to search for and a replacement string.
      *
      * @param string $search The substring to be replaced.
      * @param string $replace The replacement string.
@@ -30,8 +42,10 @@ class ReplaceModifier implements Modifier
     /**
      * Applies the replacement modification to the given value.
      *
-     * @param mixed $value The input value.
-     * @return mixed The modified value with replacements applied.
+     * This method searches for occurrences of the `search` substring in the input `value` and replaces them with the `replace` string.
+     *
+     * @param mixed $value The input value in which the replacement will occur.
+     * @return mixed The modified value with the specified replacements applied.
      */
     public function apply(mixed $value): mixed
     {

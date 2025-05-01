@@ -7,21 +7,32 @@ use IPLeiria\ESTG\EI\DBContextSeeder\Enums\HashAlgorithm;
 /**
  * Class HashModifier
  *
- * This class is responsible for applying different hashing algorithms
- * to a given value based on the specified HashAlgorithm.
+ * Applies a specified hashing algorithm to a given value.
+ * Caches previously computed hashes to improve performance on repeated values.
+ *
+ * @package IPLeiria\ESTG\EI\DBContextSeeder\Modifiers
  */
 class HashModifier implements Modifier
 {
     /**
-     * @var HashAlgorithm The hashing algorithm to use.
+     * The hashing algorithm to use.
+     *
+     * @var HashAlgorithm
      */
     protected HashAlgorithm $algorithm;
+
+    /**
+     * Cache for storing previously hashed values.
+     * This avoids redundant hashing operations for the same input.
+     *
+     * @var array<string, string>
+     */
     private array $cache = [];
 
     /**
      * HashModifier constructor.
      *
-     * @param HashAlgorithm $algorithm The algorithm to be used for hashing.
+     * @param HashAlgorithm $algorithm The hashing algorithm to apply.
      */
     public function __construct(HashAlgorithm $algorithm)
     {
@@ -29,14 +40,16 @@ class HashModifier implements Modifier
     }
 
     /**
-     * Applies the selected hashing algorithm to the given value.
+     * Applies the hashing algorithm to the provided value.
      *
-     * @param mixed $value The value to be hashed.
-     * @return string The hashed value.
+     * If the value was previously hashed, the result is retrieved from cache.
+     *
+     * @param mixed $value The value to hash.
+     * @return string The hashed result.
      */
     public function apply(mixed $value): string
     {
-        if(isset($this->cache[$value])) {
+        if (isset($this->cache[$value])) {
             return $this->cache[$value];
         }
 
@@ -49,8 +62,6 @@ class HashModifier implements Modifier
             HashAlgorithm::SHA256 => hash('sha256', $value),
         };
 
-        $this->cache[$value] = $hash;
-
-        return $hash;
+        return $this->cache[$value] = $hash;
     }
 }

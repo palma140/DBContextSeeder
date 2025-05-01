@@ -5,18 +5,27 @@ namespace IPLeiria\ESTG\EI\DBContextSeeder\Modifiers;
 /**
  * Class NullableModifier
  *
- * A modifier that randomly replaces a value with null based on a given probability.
+ * A modifier that randomly replaces a value with `null` based on a given probability.
+ * This is useful for simulating missing or nullable data during seeding.
+ *
+ * @package IPLeiria\ESTG\EI\DBContextSeeder\Modifiers
  */
 class NullableModifier implements Modifier
 {
-    /** @var float The probability percentage (0 to 100) of setting a value to null. */
+    /**
+     * The probability percentage (0 to 100) of setting a value to null.
+     *
+     * @var float
+     */
     private float $percentage;
 
     /**
      * NullableModifier constructor.
      *
+     * Initializes the modifier with a specified probability for null replacement.
+     *
      * @param float $percentage The probability (0-100) that a value will be set to null.
-     * @throws \InvalidArgumentException If the percentage is out of the valid range.
+     * @throws \InvalidArgumentException If the percentage is outside the valid range (0 to 100).
      */
     public function __construct(float $percentage)
     {
@@ -30,8 +39,10 @@ class NullableModifier implements Modifier
     /**
      * Applies the nullable modification to the given value.
      *
-     * @param mixed $value The input value.
-     * @return mixed|null The original value or null, based on the probability.
+     * With a probability defined by the `percentage`, the method returns `null` instead of the original value.
+     *
+     * @param mixed $value The input value to potentially modify.
+     * @return mixed|null The original value or `null`, based on the probability.
      */
     public function apply(mixed $value): mixed
     {

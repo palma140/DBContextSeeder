@@ -4,9 +4,14 @@ namespace IPLeiria\ESTG\EI\DBContextSeeder;
 
 use Faker\Factory as Faker;
 use IPLeiria\ESTG\EI\DBContextSeeder\Enums\HashAlgorithm;
+use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\CallbackModifier;
+use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\GenerateFromFieldModifier;
 use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\HashModifier;
+use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\LowercaseModifier;
 use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\Modifier;
 use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\NullableModifier;
+use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\RemoveAccentsModifier;
+use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\RowAwareModifier;
 use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\UniqueModifier;
 
 /**
@@ -37,25 +42,25 @@ abstract class FieldSeeder
      *
      * @param TableSeeder $tableSeeder The table seeder instance.
      * @param string $field The field name.
-     * @param string $language The locale for Faker (default: 'en_US').
      */
-    public function __construct(TableSeeder $tableSeeder, string $field, string $language = 'en_US')
+    public function __construct(TableSeeder $tableSeeder, string $field)
     {
         $this->tableSeeder = $tableSeeder;
         $this->field = $field;
 
         if (!self::$faker) {
-            self::$faker = Faker::create($language);
+            $this->language = $this->tableSeeder->getLanguage();
+            self::$faker = Faker::create($this->language);
         }
     }
 
     /**
      * Adds a modifier to the field.
      *
-     * @param Modifier $modifier The modifier to apply.
+     * @param Modifier|RowAwareModifier $modifier The modifier to apply.
      * @return static Returns the current instance for method chaining.
      */
-    public function addModifier(Modifier $modifier): static
+    public function addModifier(Modifier|RowAwareModifier $modifier): static
     {
         $this->modifiers[] = $modifier;
         return $this;
@@ -109,16 +114,67 @@ abstract class FieldSeeder
     }
 
     /**
+     * Removes accents from the field value.
+     *
+     * @param string $ignoreCharacters Characters to ignore when removing accents.
+     * @return static Returns the current instance for method chaining.
+     */
+    public function removeAccents(string $ignoreCharacters = ''): static
+    {
+        return $this->addModifier(new RemoveAccentsModifier($ignoreCharacters));
+    }
+
+    /**
+     * Applies a callback modifier to the field value.
+     *
+     * @param callable $callback The callback function to apply.
+     * @return static Returns the current instance for method chaining.
+     */
+    public function callback(callable $callback): static
+    {
+        return $this->addModifier(new CallbackModifier($callback));
+    }
+
+    /**
+     * Converts the field value to lowercase.
+     *
+     * @return static Returns the current instance for method chaining.
+     */
+    public function lowercase(): static
+    {
+        return $this->addModifier(new LowercaseModifier());
+    }
+
+    /**
+     * Generates a value for the field based on another field.
+     *
+     * @param string $sourceField The source field name.
+     * @param callable $callback The callback to generate the value.
+     * @return static Returns the current instance for method chaining.
+     */
+    public function generateFromField(string $sourceField, callable $callback): static
+    {
+        return $this->addModifier(new GenerateFromFieldModifier($sourceField, $callback));
+    }
+
+    /**
      * Generates a value for the field, applying all modifiers.
      *
      * @return mixed The generated field value.
      */
-    public function generate(): mixed
+    public function generate(array $row = []): mixed
     {
-        $value = $this->generateValue();
+        try {
+            $value = $this->generateValue();
+        } catch (\OverflowException $e) {
+            $column = $this->field;
+            echo "\n\e[31m❌ OverflowException: Maximum retries reached for column '{$column}'\e[0m\n";
+
+            throw $e;
+        }
 
         foreach ($this->modifiers as $modifier) {
-            $value = $modifier->apply($value);
+            $value = $modifier->apply($value, $row);
         }
 
         return $value;
