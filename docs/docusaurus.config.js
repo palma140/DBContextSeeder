@@ -14,7 +14,7 @@ module.exports = {
             'classic',
             {
                 docs: {
-                    routeBasePath: '/',
+                    routeBasePath: '',
                 },
                 blog: false,
                 theme: {
