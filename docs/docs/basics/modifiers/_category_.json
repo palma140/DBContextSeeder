@@ -1,8 +1,0 @@
-{
-  "label": "Modifiers",
-  "position": 2,
-  "link": {
-    "type": "generated-index",
-    "description": "Modifiers are functions that are applied after the data is generated, with the goal of transforming or adjusting the final values. You can chain multiple modifiers to a single field using the fluent interface."
-  }
-}
