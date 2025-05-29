@@ -7,12 +7,14 @@ use IPLeiria\ESTG\EI\DBContextSeeder\Enums\HashAlgorithm;
 use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\CallbackModifier;
 use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\GenerateFromFieldModifier;
 use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\HashModifier;
+use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\LookupModifier;
 use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\LowercaseModifier;
 use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\Modifier;
 use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\NullableModifier;
 use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\RemoveAccentsModifier;
 use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\RowAwareModifier;
 use IPLeiria\ESTG\EI\DBContextSeeder\Modifiers\UniqueModifier;
+use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\FileSeeder;
 
 /**
  * Class FieldSeeder
@@ -157,6 +159,11 @@ abstract class FieldSeeder
         return $this->addModifier(new GenerateFromFieldModifier($sourceField, $callback));
     }
 
+    public function lookup(string $table, callable $matcher, callable $callback): static
+    {
+        return $this->addModifier(new LookupModifier($table, $matcher, $callback));
+    }
+
     /**
      * Generates a value for the field, applying all modifiers.
      *
@@ -165,7 +172,11 @@ abstract class FieldSeeder
     public function generate(array $row = []): mixed
     {
         try {
-            $value = $this->generateValue();
+            if($this instanceof FileSeeder) {
+                $value = $this->generateValueWithRow($row);
+            } else {
+                $value = $this->generateValue();
+            }
         } catch (\OverflowException $e) {
             $column = $this->field;
             echo "\n\e[31m❌ OverflowException: Maximum retries reached for column '{$column}'\e[0m\n";
@@ -180,10 +191,5 @@ abstract class FieldSeeder
         return $value;
     }
 
-    /**
-     * Abstract method that must be implemented to generate the raw field value.
-     *
-     * @return mixed The generated raw value.
-     */
     abstract protected function generateValue(): mixed;
 }

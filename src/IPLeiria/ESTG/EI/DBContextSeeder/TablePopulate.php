@@ -18,24 +18,32 @@ use League\Csv\Reader;
 class TablePopulate
 {
     /**
-     * @var TableSeeder $seeder The TableSeeder instance that defines the table and field seeders.
+     * The table seeder instance used to populate the data.
+     *
+     * @var TableSeeder
      */
     protected TableSeeder $seeder;
 
     /**
-     * @var \Closure|null $beforeCallback The callback to execute before population.
+     * Optional callback to be executed before the table population process.
+     * Can be a Closure or any callable.
+     *
+     * @var \Closure|null
      */
     protected ?\Closure $beforeCallback = null;
 
     /**
-     * @var \Closure|null $afterCallback The callback to execute after population.
+     * Optional callback to be executed after the table population process.
+     * Can be a Closure or any callable.
+     *
+     * @var \Closure|null
      */
     protected ?\Closure $afterCallback = null;
 
     /**
-     * TablePopulate constructor.
+     * Constructor that receives the table seeder.
      *
-     * @param TableSeeder $seeder The TableSeeder instance that defines the table and its fields.
+     * @param TableSeeder $seeder The seeder instance to populate the table.
      */
     public function __construct(TableSeeder $seeder)
     {
@@ -43,48 +51,63 @@ class TablePopulate
     }
 
     /**
-     * Registers a callback to execute before the population process.
+     * Sets a callback to be executed before the table population process.
      *
-     * @param callable $callback The callback to execute before population.
-     * @return TablePopulate The current instance for method chaining.
+     * @param callable $callback Function or Closure to be executed before populating.
+     * @return TablePopulate Returns the current instance to allow method chaining.
      */
     public function before(callable $callback): TablePopulate
     {
+        // Ensures the callback is stored as a Closure
         $this->beforeCallback = $callback instanceof \Closure ? $callback : $callback(...);
         return $this;
     }
 
     /**
-     * Registers a callback to execute after the population process.
+     * Sets a callback to be executed after the table population process.
      *
-     * @param callable $callback The callback to execute after population.
-     * @return TablePopulate The current instance for method chaining.
+     * @param callable $callback Function or Closure to be executed after populating.
+     * @return TablePopulate Returns the current instance to allow method chaining.
      */
     public function after(callable $callback): TablePopulate
     {
+        // Ensures the callback is stored as a Closure
         $this->afterCallback = $callback instanceof \Closure ? $callback : $callback(...);
         return $this;
     }
 
     /**
-     * Populates the table with the specified number of records.
-     * Data is inserted in batches, with retries on failure.
+     * Populates the table with generated data or data from a callable count.
      *
-     * @param int $count The total number of records to insert.
-     * @param int $batchSize The number of records to insert per batch (default: 1000).
-     * @param int $maxRetries The maximum number of retries in case of failure (default: 1).
-     * @param bool $verbose Whether to show verbose error messages (default: false).
-     * @throws Exception If population fails after the specified number of retries.
+     * @param int|callable $count Number of records to insert or a callable returning that number.
+     * @param int $batchSize Number of records to insert per batch (default: 1000).
+     * @param int $maxRetries Number of retries per batch on failure (default: 1).
+     * @param bool $verbose Whether to show detailed error messages (default: false).
+     *
+     * @throws \InvalidArgumentException if $count is not an integer or a callable returning integer.
+     * @throws \Exception if maximum retries are exceeded during batch insert.
+     *
+     * @return void
      */
-    public function populate(int $count, int $batchSize = 1000, int $maxRetries = 1, bool $verbose = false): void
+    public function populate(int|callable $count, int $batchSize = 1000, int $maxRetries = 1, bool $verbose = false): void
     {
+        if (is_callable($count)) {
+            $count = call_user_func($count);
+        }
+
+        if (!is_int($count)) {
+            throw new \InvalidArgumentException("The count must be an integer or a callback that returns an integer.");
+        }
+
         if ($this->beforeCallback) {
             ($this->beforeCallback)();
         }
 
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        $driver = DB::getDriverName();
+        $this->disableForeignKeyChecks($driver);
+
+        // Clear existing data before populating
         DB::table($this->seeder->getTable())->truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         echo "\e[33m⚠️ Table truncated: {$this->seeder->getTable()}.\e[0m\n";
 
         $fields = $this->seeder->getFields();
@@ -95,6 +118,7 @@ class TablePopulate
             $success = false;
             $attempts = 0;
 
+            // Save state of sequential number fields in case of retry
             $fieldStates = [];
             foreach ($fields as $fieldName => $fieldSeeder) {
                 if ($fieldSeeder instanceof SequentionalNumberSeeder) {
@@ -105,11 +129,13 @@ class TablePopulate
             while (!$success && $attempts < $maxRetries) {
                 $batch = [];
 
+                // Generate a batch of rows
                 for ($i = 0; $i < min($batchSize, $count - $inserted); $i++) {
                     $batch[] = $this->generateRow($fields);
                 }
 
                 try {
+                    // Insert batch into database
                     DB::table($table)->insert($batch);
                     $inserted += count($batch);
                     echo "\e[32m✅ Inserted {$inserted}/{$count} records into {$table}...\e[0m\n";
@@ -117,6 +143,7 @@ class TablePopulate
                 } catch (\Exception $e) {
                     $attempts++;
 
+                    // Restore sequential numbers to previous state before retry
                     foreach ($fields as $fieldName => $fieldSeeder) {
                         if (isset($fieldStates[$fieldName]) && $fieldSeeder instanceof SequentionalNumberSeeder) {
                             $fieldSeeder->setCurrentNumber($fieldStates[$fieldName]);
@@ -134,6 +161,8 @@ class TablePopulate
             }
         }
 
+        $this->enableForeignKeyChecks($driver);
+
         if ($this->afterCallback) {
             ($this->afterCallback)();
         }
@@ -142,10 +171,68 @@ class TablePopulate
     }
 
     /**
-     * Extracts the relevant SQL error message, removing unnecessary connection details.
+     * Disables foreign key checks for the current database driver to allow
+     * truncating and inserting data without constraint errors.
      *
-     * @param string $message The error message to extract from.
-     * @return string The relevant SQL error message.
+     * @param string $driver Database driver name.
+     * @return void
+     */
+    protected function disableForeignKeyChecks(string $driver): void
+    {
+        try {
+            match ($driver) {
+                'mysql' => DB::statement('SET FOREIGN_KEY_CHECKS=0;'),
+                'sqlite' => DB::statement('PRAGMA foreign_keys = OFF;'),
+                'pgsql' => DB::statement('SET CONSTRAINTS ALL DEFERRED;'),
+                'sqlsrv' => DB::statement('ALTER TABLE ' . $this->seeder->getTable() . ' NOCHECK CONSTRAINT ALL;'),
+                'oracle' => DB::statement("
+                BEGIN
+                    FOR c IN (SELECT constraint_name, table_name FROM user_constraints WHERE constraint_type = 'R') LOOP
+                        EXECUTE IMMEDIATE 'ALTER TABLE ' || c.table_name || ' DISABLE CONSTRAINT ' || c.constraint_name;
+                    END LOOP;
+                END;
+            "),
+                default => null,
+            };
+        } catch (\Throwable $e) {
+            echo "\e[33m⚠️ Could not disable foreign key checks for driver [$driver]: {$e->getMessage()}\e[0m\n";
+        }
+    }
+
+    /**
+     * Enables foreign key checks after data insertion to restore
+     * referential integrity enforcement.
+     *
+     * @param string $driver Database driver name.
+     * @return void
+     */
+    protected function enableForeignKeyChecks(string $driver): void
+    {
+        try {
+            match ($driver) {
+                'mysql' => DB::statement('SET FOREIGN_KEY_CHECKS=1;'),
+                'sqlite' => DB::statement('PRAGMA foreign_keys = ON;'),
+                'pgsql' => DB::statement('SET CONSTRAINTS ALL IMMEDIATE;'),
+                'sqlsrv' => DB::statement('ALTER TABLE ' . $this->seeder->getTable() . ' CHECK CONSTRAINT ALL;'),
+                'oracle' => DB::statement("
+                BEGIN
+                    FOR c IN (SELECT constraint_name, table_name FROM user_constraints WHERE constraint_type = 'R') LOOP
+                        EXECUTE IMMEDIATE 'ALTER TABLE ' || c.table_name || ' ENABLE CONSTRAINT ' || c.constraint_name;
+                    END LOOP;
+                END;
+            "),
+                default => null,
+            };
+        } catch (\Throwable $e) {
+            echo "\e[33m⚠️ Could not enable foreign key checks for driver [$driver]: {$e->getMessage()}\e[0m\n";
+        }
+    }
+
+    /**
+     * Extracts the most relevant part of an SQL error message, trimming connection details.
+     *
+     * @param string $message Full error message.
+     * @return string Cleaned error message.
      */
     private function extractRelevantSqlError(string $message): string
     {
@@ -153,27 +240,35 @@ class TablePopulate
     }
 
     /**
-     * Generates a single row of data based on the field seeders.
+     * Generates a single row of data based on the defined field seeders.
+     * Supports overrides for specific fields.
      *
-     * @param array $fields The field seeders to use for generating the row.
-     * @return array The generated row of data.
+     * @param array $fields Array of field seeders keyed by field name.
+     * @param array $overrides Optional associative array of field => value to override generation.
+     * @return array Generated row data.
      */
-    private function generateRow(array $fields): array
+    private function generateRow(array $fields, array $overrides = []): array
     {
         $row = [];
 
         foreach ($fields as $field => $fieldSeeder) {
-            $row[$field] = $fieldSeeder->generate($row);
+            if (array_key_exists($field, $overrides)) {
+                $row[$field] = $overrides[$field];
+            } else {
+                $row[$field] = $fieldSeeder->generate($row);
+            }
         }
+
         return $row;
     }
 
     /**
-     * Populates the table with data from a CSV file.
+     * Populates the table by importing data from a CSV file.
+     * Supports batch inserts and automatically generates missing fields.
      *
-     * @param string $csvPath The path to the CSV file.
-     * @param int $batchSize The number of records to insert per batch (default: 1000).
-     * @throws Exception If the CSV file is not found or not readable.
+     * @param string $csvPath Path to the CSV file.
+     * @param int $batchSize Number of records to insert per batch (default: 1000).
+     * @return void
      */
     public function populateFromCSV(string $csvPath, int $batchSize = 1000): void
     {
@@ -186,20 +281,29 @@ class TablePopulate
                 throw new Exception("CSV file not found or not readable: $csvPath");
             }
 
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            $driver = DB::getDriverName();
+            $this->disableForeignKeyChecks($driver);
             DB::table($this->seeder->getTable())->truncate();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
             echo "\e[33m⚠️ Table truncated: {$this->seeder->getTable()}.\e[0m\n";
 
             $csv = Reader::createFromPath($csvPath, 'r');
             $csv->setHeaderOffset(0);
 
             $table = $this->seeder->getTable();
-            $inserted = 0;
+            $fields = $this->seeder->getFields();
+
             $batch = [];
+            $inserted = 0;
 
             foreach ($csv as $record) {
-                $batch[] = $record;
+                // Generate missing fields if not present in CSV
+                foreach ($this->seeder->getFields() as $field => $fieldSeeder) {
+                    if (!array_key_exists($field, $record)) {
+                        $record[$field] = $fieldSeeder->generate($record);
+                    }
+                }
+                $row = $this->generateRow($fields, $record);
+                $batch[] = $row;
 
                 if (count($batch) >= $batchSize) {
                     DB::table($table)->insert($batch);
@@ -215,15 +319,19 @@ class TablePopulate
                 echo "\e[32m✅ Inserted {$inserted} records into {$table}...\e[0m\n";
             }
 
+            $this->enableForeignKeyChecks($driver);
+
             if ($this->afterCallback) {
                 ($this->afterCallback)();
             }
 
-            echo "\e[32m🎉 CSV Import Completed! {$inserted} records inserted into {$table}.\e[0m\n";
+            echo "\e[32m🎉 CSV Import completed! {$inserted} records inserted into {$table}.\e[0m\n";
+
         } catch (Exception $e) {
-            echo "\e[31m❌ Error: {$e->getMessage()}\e[0m\n";
+            echo "\e[31m❌ Error during CSV import: {$e->getMessage()}\e[0m\n";
         }
     }
+
 
     /**
      * Populates the table with data from a JSON file.
@@ -265,6 +373,11 @@ class TablePopulate
 
             foreach ($records as $record) {
                 $batch[] = $record;
+                foreach ($this->seeder->getFields() as $field => $fieldSeeder) {
+                    if (!array_key_exists($field, $record)) {
+                        $record[$field] = $fieldSeeder->generate($record);
+                    }
+                }
 
                 if (count($batch) >= $batchSize) {
                     DB::table($table)->insert($batch);
@@ -318,6 +431,13 @@ class TablePopulate
             $batch = [];
 
             foreach ($data as $record) {
+                // Aplica os FieldSeeders para campos não definidos
+                foreach ($this->seeder->getFields() as $field => $fieldSeeder) {
+                    if (!array_key_exists($field, $record)) {
+                        $record[$field] = $fieldSeeder->generate($record);
+                    }
+                }
+
                 $batch[] = $record;
 
                 if (count($batch) >= $batchSize) {

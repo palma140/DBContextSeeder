@@ -10,7 +10,7 @@ namespace IPLeiria\ESTG\EI\DBContextSeeder\Modifiers;
  *
  * @package IPLeiria\ESTG\EI\DBContextSeeder\Modifiers
  */
-class GenerateFromFieldModifier implements Modifier
+class GenerateFromFieldModifier implements RowAwareModifier
 {
     /**
      * The name of the source field from which to derive the value.
@@ -45,7 +45,7 @@ class GenerateFromFieldModifier implements Modifier
      * @param mixed $value The current value of the field being modified.
      * @return mixed The generated or transformed value.
      */
-    public function apply(mixed $value): mixed
+    public function apply(mixed $value, $row): mixed
     {
         if (isset($row[$this->sourceField])) {
             return ($this->callback)($row[$this->sourceField]);

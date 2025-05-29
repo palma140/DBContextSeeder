@@ -2,6 +2,7 @@
 
 namespace IPLeiria\ESTG\EI\DBContextSeeder;
 
+use Closure;
 use Exception;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Company\CompanySeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Financial\CurrencyCodeSeeder;
@@ -28,6 +29,8 @@ use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\EmojiSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\FileSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\LanguageCodeSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\Md5Seeder;
+use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\TimeSeriesSeeder;
+use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Text\TextSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\SequentionalNumberSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\Sha1Seeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\Sha256Seeder;
@@ -122,13 +125,33 @@ class TableSeeder
      * Adds a file field seeder.
      *
      * @param string $field The name of the field.
+     * @param string $source The source path or identifier.
+     * @param string $destination The destination path or identifier.
+     * @param Closure|null $callback Optional callback to manipulate the file.
+     * @param Closure|null $renameCallback Optional callback to rename the file.
+     * @param string|null $memoryLimit Optional memory limit for the seeding process.
      *
      * @return FieldSeeder The field seeder object.
      */
-    public function file(string $field): FieldSeeder
-    {
-        return $this->addField($field, new FileSeeder($this, $field));
+    public function file(
+        string $field,
+        string $source,
+        string $destination,
+        ?Closure $callback = null,
+        ?Closure $renameCallback = null,
+        ?string $memoryLimit = null
+    ): FieldSeeder {
+        return $this->addField($field, new FileSeeder(
+            $this,
+            $field,
+            $source,
+            $destination,
+            $callback,
+            $renameCallback,
+            $memoryLimit
+        ));
     }
+
 
     /**
      * Adds a name field seeder.
@@ -176,6 +199,11 @@ class TableSeeder
     public function country(string $field): FieldSeeder
     {
         return $this->addField($field, new CountrySeeder($this, $field));
+    }
+
+    public function text(string $field, int $maxCharacters): FieldSeeder
+    {
+        return $this->addField($field, new TextSeeder($this, $field, $maxCharacters));
     }
 
     /**
@@ -770,6 +798,29 @@ class TableSeeder
     {
         return $this->addField($field, new SequentionalNumberSeeder($this, $field, $start));
     }
+
+    public function timeSeries(
+        string $field,
+        string $startDate,
+        string $endDate,
+        string $granularity,
+        Closure $entriesPerPeriod,
+        Closure $entryFactory,
+        Closure $deltaAvg,
+    ): FieldSeeder
+    {
+        return $this->addField($field, new TimeSeriesSeeder(
+            $this,
+            $field,
+            $startDate,
+            $endDate,
+            $granularity,
+            $entriesPerPeriod,
+            $entryFactory,
+            $deltaAvg
+        ));
+    }
+
 
     /**
      * Adds a field seeder that fetches values from a SQL query.
