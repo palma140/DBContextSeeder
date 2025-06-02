@@ -20,7 +20,7 @@
 ## 📚 Documentation
 
 Full documentation available here:  
-[https://github.com/palma140/DBContextSeeder](https://github.com/palma140/DBContextSeeder) *(Work in Progress)*
+[https://palma140.github.io/DBContextSeeder/docs/intro](https://palma140.github.io/DBContextSeeder/docs/intro)
 
 
 
