@@ -73,7 +73,7 @@ abstract class FieldSeeder
      *
      * @return bool True if the field should be unique, false otherwise.
      */
-    protected function isUnique(): bool
+    public function isUnique(): bool
     {
         foreach ($this->modifiers as $modifier) {
             if ($modifier instanceof UniqueModifier) {

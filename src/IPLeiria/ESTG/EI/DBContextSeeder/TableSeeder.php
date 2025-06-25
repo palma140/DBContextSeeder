@@ -831,9 +831,9 @@ class TableSeeder
      *
      * @return FieldSeeder The field seeder object.
      */
-    public function sql(string $field, string $query, array $bindings): FieldSeeder
+    public function sql(string $field, string $query, array $bindings, bool $preserveOrder = false): FieldSeeder
     {
-        return $this->addField($field, new SqlSeeder($this, $field, $query, $bindings));
+        return $this->addField($field, new SqlSeeder($this, $field, $query, $bindings, $preserveOrder));
     }
 
     /**

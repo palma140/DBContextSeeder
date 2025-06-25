@@ -2,6 +2,7 @@
 
 namespace IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous;
 
+use Dotenv\Util\Str;
 use IPLeiria\ESTG\EI\DBContextSeeder\FieldSeeder;
 use Illuminate\Support\Facades\File;
 use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
@@ -22,6 +23,7 @@ class FileSeeder extends FieldSeeder
     protected array $sourceFiles = [];
     protected array $usedFiles = [];
     protected bool $initialized = false;
+    protected array $backupUsedFiles = [];
 
     /**
      * FileSeeder constructor.
@@ -75,6 +77,32 @@ class FileSeeder extends FieldSeeder
     }
 
     /**
+     * Backups the current state of used files
+     */
+    public function backupState(): void
+    {
+        $this->backupUsedFiles = $this->usedFiles;
+    }
+
+    /**
+     * Restores the state of used files from backup
+     */
+    public function restoreState(): void
+    {
+        $this->usedFiles = $this->backupUsedFiles;
+
+        // Clean destination directory from files that were copied after the backup point
+        $currentFiles = File::allFiles($this->destination);
+        $backupCount = count($this->backupUsedFiles);
+
+        foreach ($currentFiles as $index => $file) {
+            if ($index >= $backupCount) {
+                File::delete($file->getPathname());
+            }
+        }
+    }
+
+    /**
      * Generates the value for a database row and copies the corresponding file to the destination.
      *
      * @param array $row The full row data, allowing access to other fields for context.
@@ -84,22 +112,44 @@ class FileSeeder extends FieldSeeder
     {
         $this->initialize();
 
-        $remainingFiles = array_diff($this->sourceFiles, $this->usedFiles);
-        shuffle($remainingFiles);
+        // Se o campo deve ser único, usar apenas arquivos não utilizados
+        if ($this->isUnique()) {
+            $availableFiles = array_diff($this->sourceFiles, $this->usedFiles);
 
-        foreach ($remainingFiles as $filePath) {
+            // Se não há mais arquivos únicos disponíveis, retornar null
+            if (empty($availableFiles)) {
+                return null;
+            }
+
+            // Embaralhar apenas os arquivos disponíveis
+            $availableFiles = array_values($availableFiles);
+            shuffle($availableFiles);
+            $filesToCheck = $availableFiles;
+        } else {
+            // Se não precisa ser único, usar todos os arquivos aleatoriamente
+            $filesToCheck = $this->sourceFiles;
+            shuffle($filesToCheck);
+        }
+
+        foreach ($filesToCheck as $filePath) {
             $originalName = basename($filePath);
 
+            // Aplicar callback de filtro se existir
             if ($this->callback && !$this->callback->__invoke($filePath, $originalName, $row)) {
                 continue;
             }
 
+            // Aplicar callback de renomeação se existir
             $renamed = $this->renameCallback?->__invoke($originalName, $row);
-
             $finalName = (!is_string($renamed) || trim($renamed) === '') ? $originalName : $renamed;
 
+            // Copiar arquivo para destino
             File::copy($filePath, $this->destination . DIRECTORY_SEPARATOR . $finalName);
-            $this->usedFiles[] = $filePath;
+
+            // Marcar arquivo como usado apenas se o campo for único
+            if ($this->isUnique()) {
+                $this->usedFiles[] = $filePath;
+            }
 
             return $finalName;
         }

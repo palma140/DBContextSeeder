@@ -5,7 +5,8 @@
         "ipleiria",
         "dbcontextseeder",
         "seeders",
-        "database"
+        "database",
+        "laravel"
     ],
     "homepage": "https://github.com/ipleiria/dbcontextseeder",
     "license": "GPL-2.0-or-later",
@@ -29,7 +30,6 @@
         "league/csv": "^9.23"
     },
     "require-dev": {
-        "phpunit/phpunit": "^12.0.7"
     },
     "autoload": {
         "psr-4": {

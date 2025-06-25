@@ -4,6 +4,7 @@ namespace IPLeiria\ESTG\EI\DBContextSeeder;
 
 use Exception;
 use Illuminate\Support\Facades\DB;
+use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\FileSeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Miscellaneous\SequentionalNumberSeeder;
 use League\Csv\Reader;
 
@@ -106,7 +107,6 @@ class TablePopulate
         $driver = DB::getDriverName();
         $this->disableForeignKeyChecks($driver);
 
-        // Clear existing data before populating
         DB::table($this->seeder->getTable())->truncate();
         echo "\e[33m⚠️ Table truncated: {$this->seeder->getTable()}.\e[0m\n";
 
@@ -117,25 +117,27 @@ class TablePopulate
         while ($inserted < $count) {
             $success = false;
             $attempts = 0;
-
-            // Save state of sequential number fields in case of retry
-            $fieldStates = [];
-            foreach ($fields as $fieldName => $fieldSeeder) {
-                if ($fieldSeeder instanceof SequentionalNumberSeeder) {
-                    $fieldStates[$fieldName] = $fieldSeeder->getCurrentNumber();
-                }
-            }
+            $batch = null;
 
             while (!$success && $attempts < $maxRetries) {
+                // CORREÇÃO 1: Fazer backup ANTES de gerar o batch
+                $fieldStates = [];
+                foreach ($fields as $fieldName => $fieldSeeder) {
+                    if ($fieldSeeder instanceof SequentionalNumberSeeder) {
+                        $fieldStates[$fieldName] = $fieldSeeder->getCurrentNumber();
+                    } elseif ($fieldSeeder instanceof FileSeeder) {
+                        $fieldSeeder->backupState(); // Backup antes de gerar
+                    }
+                }
+
                 $batch = [];
 
-                // Generate a batch of rows
+                // Gerar o batch
                 for ($i = 0; $i < min($batchSize, $count - $inserted); $i++) {
                     $batch[] = $this->generateRow($fields);
                 }
 
                 try {
-                    // Insert batch into database
                     DB::table($table)->insert($batch);
                     $inserted += count($batch);
                     echo "\e[32m✅ Inserted {$inserted}/{$count} records into {$table}...\e[0m\n";
@@ -143,10 +145,12 @@ class TablePopulate
                 } catch (\Exception $e) {
                     $attempts++;
 
-                    // Restore sequential numbers to previous state before retry
+                    // CORREÇÃO 2: Restaurar estado após falha
                     foreach ($fields as $fieldName => $fieldSeeder) {
-                        if (isset($fieldStates[$fieldName]) && $fieldSeeder instanceof SequentionalNumberSeeder) {
+                        if ($fieldSeeder instanceof SequentionalNumberSeeder) {
                             $fieldSeeder->setCurrentNumber($fieldStates[$fieldName]);
+                        } elseif ($fieldSeeder instanceof FileSeeder) {
+                            $fieldSeeder->restoreState(); // Restaurar arquivos
                         }
                     }
 
@@ -155,7 +159,7 @@ class TablePopulate
 
                     if ($attempts >= $maxRetries) {
                         echo "\e[31m❌ Max retries reached. Aborting...\e[0m\n";
-                        throw new Exception("Failed to insert batch after {$maxRetries} attempts: " . $e->getMessage());
+                        throw new \Exception("Failed to insert batch after {$maxRetries} attempts: " . $e->getMessage());
                     }
                 }
             }
@@ -167,8 +171,9 @@ class TablePopulate
             ($this->afterCallback)();
         }
 
-        echo "\e[32m🎉 Population completed for {$table}" . ($count > 0 ? ": {$count} records inserted" : "") . ".\e[0m\n";
+        echo "\e[32m🎉 Population completed for {$table}: {$count} records inserted.\e[0m\n";
     }
+
 
     /**
      * Disables foreign key checks for the current database driver to allow
@@ -351,9 +356,11 @@ class TablePopulate
                 throw new Exception("JSON file not found or not readable: $jsonPath");
             }
 
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            $driver = DB::getDriverName();
+            $this->disableForeignKeyChecks($driver);
             DB::table($this->seeder->getTable())->truncate();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            $this->enableForeignKeyChecks($driver);
+
             echo "\e[33m⚠️ Table truncated: {$this->seeder->getTable()}.\e[0m\n";
 
             $jsonContent = file_get_contents($jsonPath);
@@ -421,9 +428,11 @@ class TablePopulate
                 throw new Exception('Input array is empty.');
             }
 
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            $driver = DB::getDriverName();
+            $this->disableForeignKeyChecks($driver);
             DB::table($this->seeder->getTable())->truncate();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            $this->enableForeignKeyChecks($driver);
+
             echo "\e[33m⚠️ Table truncated: {$this->seeder->getTable()}.\e[0m\n";
 
             $table = $this->seeder->getTable();
