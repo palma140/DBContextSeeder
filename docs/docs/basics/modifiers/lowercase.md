@@ -2,13 +2,15 @@
 sidebar_position: 6
 ---
 
-# Lowercase
+# 🔡 Lowercase
 
 Converts the value to lowercase.
 
 ---
 
-**Example:**
+## Example Usage
 
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->email('email')->lowercase();

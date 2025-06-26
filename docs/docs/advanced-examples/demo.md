@@ -1,10 +1,9 @@
 ---
-sidebar_position: 5
+sidebar_position: 8
 ---
 
-# Advanced Examples
+# Full Demo
 
-![Texto alternativo](/img/1.png)
 
 ```php
 <?php
@@ -124,7 +123,7 @@ class DatabaseSeederGrocery extends Seeder
 
         $users->array('gender', ['M', 'F']);
 
-        $users->file('photo', __DIR__ . '\photos', storage_path('app/public/photos'), function ($file, $originalName, $row) {
+        $users->file('photo', __DIR__ . DIRECTORY_SEPARATOR . 'photos', storage_path('app/public/photos'), function ($file, $originalName, $row) {
             if($row['gender'] == 'M' && (Str::charAt($originalName, 0) == 'M' || Str::charAt($originalName, 0) == 'm')) return true;
             if($row['gender'] == 'F' && (Str::charAt($originalName, 0) == 'W' || Str::charAt($originalName, 0) == 'w')) return true;
 
@@ -197,7 +196,7 @@ class DatabaseSeederGrocery extends Seeder
             'Grains',
         ], true);
 
-        $categoriesSeeder->file('image', __DIR__ . '\categories_images', storage_path('app\public\categories_images'), function ($file, $originalName, $row) {
+        $categoriesSeeder->file('image', __DIR__ . DIRECTORY_SEPARATOR . 'categories_images', storage_path('app\public\categories_images'), function ($file, $originalName, $row) {
             if($row['name'] == 'Fruits' && explode('.', $originalName)[0] == 'fruits') return true;
             if($row['name'] == 'Vegetables' && explode('.', $originalName)[0] == 'vegetables') return true;
             if($row['name'] == 'Dairy' && explode('.', $originalName)[0] == 'dairy') return true;
@@ -240,7 +239,7 @@ class DatabaseSeederGrocery extends Seeder
 
         $productsSeeder = new TableSeeder('products', 'pt_PT');
         $productsSeeder->text('description', 30);
-        $productsSeeder->file('photo', __DIR__ . '\products_photos', storage_path('app\public\products_photos'), function ($file, $originalName, $row) {
+        $productsSeeder->file('photo', __DIR__ . DIRECTORY_SEPARATOR . 'products_photos', storage_path('app\public\products_photos'), function ($file, $originalName, $row) {
             $normalized = strtolower(str_replace(' ', '_', $row['name']));
             if($normalized == explode('.', $originalName)[0]) return true;
             return null;
@@ -329,7 +328,7 @@ class DatabaseSeederGrocery extends Seeder
 
             return $baseCount + rand($min, $max);
         });
-        $ordersSeeder->file('pdf_receipt', __DIR__ . '\receipts', storage_path('app\public\receipts'), function ($file, $originalName, $row) {return true;}, function () {}, '1G');
+        $ordersSeeder->file('pdf_receipt', __DIR__ . DIRECTORY_SEPARATOR . 'receipts', storage_path('app\public\receipts'), function ($file, $originalName, $row) {return true;}, function () {}, '1G');
 
         $ordersPopulator = new TablePopulate($ordersSeeder);
         $ordersPopulator->populate(21000); //TODO se for null popula ate ao maximo que der

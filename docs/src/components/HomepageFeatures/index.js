@@ -4,36 +4,34 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
+    title: 'Effortless Data Seeding',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Quickly populate your database tables with realistic and structured data using fluent and intuitive syntax. Save time and reduce boilerplate.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Focus on Your Logic',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Don’t waste time creating fake data manually — our tools let you focus on building your application while we handle the data scaffolding.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Fully Customizable',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Extend and customize every aspect of the seeding logic: add callbacks, transformations, file handling, and more — all with simple PHP closures.
       </>
     ),
   },
 ];
+
 
 function Feature({Svg, title, description}) {
   return (

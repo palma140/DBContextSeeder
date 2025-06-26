@@ -2,15 +2,17 @@
 sidebar_position: 12
 ---
 
-# Unique
+# 🔒 Unique
 
 Ensures all values generated for this column are unique.
 
 ---
 
-**Example:**
+## Example Usage
 
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->email('email')->unique(); //tells faker that it should generate only unique emails
 ```
 ## ⚠️ Warning

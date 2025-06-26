@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Callback
+# 🔄 Callback
 
 Applies a user-defined callback to the generated value.
 
@@ -10,9 +10,11 @@ Applies a user-defined callback to the generated value.
 - `$value`: The current generated value.
 - `$row`: The array with all previously generated values in the current row.
 
-**Example:**
+## Example Usage
 
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->email('email')->callback(function ($value, $row) {
     $name = explode(' ', $row['name']);
     return strtolower($name[0] . '.' . ($name[1] ?? '') . '@email.com');

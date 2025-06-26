@@ -23,6 +23,9 @@ This separation of concerns makes it easy to reuse and customize seeding logic a
 You can attach `before()` and `after()` callbacks to inject behavior at key points in the seeding lifecycle, offering a high degree of control.
 
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+use IPLeiria\ESTG\EI\DBContextSeeder\TablePopulate;
+
 $seeder = new TableSeeder('table', 'en_US');
 (...)
 $populator = new TablePopulate($seeder);

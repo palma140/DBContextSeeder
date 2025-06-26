@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Installation
+# 🚀 Installation
 
 **DBContextSeeder** is a Laravel package that helps you seed your database using a class-based and reusable structure. It allows you to break down your seeding logic into multiple seeders and run them in a controlled way.
 

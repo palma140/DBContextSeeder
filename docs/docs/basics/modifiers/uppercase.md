@@ -2,13 +2,15 @@
 sidebar_position: 5
 ---
 
-# Uppercase
+# 🔠 Uppercase
 
 Converts the value to uppercase.
 
 ---
 
-**Example:**
+## Example Usage
 
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->email('email')->uppercase();

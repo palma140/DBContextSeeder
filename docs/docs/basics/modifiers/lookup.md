@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Lookup
+# 🔍 Lookup
 
 The **LookupModifier** replaces the value of a field by looking up related data from another table.
 
@@ -13,6 +13,8 @@ This modifier is useful when you want to populate a field based on a relation or
 ## Example Usage
 
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $itemsSeeder->value('unit_price', null)->LookupModifier('products',
     // Callback to find the matching row in the 'products' table
     function ($row, $targetRow) {
@@ -30,7 +32,7 @@ $itemsSeeder->value('unit_price', null)->LookupModifier('products',
 
 This function receives the current row (`$row`) and a candidate target row (`$targetRow`) from the related table ('products').  
 It returns `true` if the target row matches the criteria; in this example, it checks if the `product_id` in the current row matches the `id` of the product row.
-
+s
 ```php
 function ($row, $targetRow) {
     return $row['product_id'] == $targetRow['id'];

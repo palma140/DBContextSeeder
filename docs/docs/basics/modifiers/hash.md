@@ -2,7 +2,7 @@
 sidebar_position: 15
 ---
 
-# Hash
+# #️⃣ Hash
 
 The **hash** modifier transforms the generated value into a hashed string using one of several supported algorithms.
 
@@ -24,9 +24,13 @@ By default, the modifier uses the BCRYPT algorithm.
 ## Example Usage
 
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->value('password', '123')->hash(); // BCRYPT
 ```
 Or
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->value('password', '123')->hash(HashAlgorithm::SHA256); // SHA256
 ```

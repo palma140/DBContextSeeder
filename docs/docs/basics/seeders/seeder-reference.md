@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 15
 ---
 
 # Seeders Reference
@@ -9,24 +9,32 @@ sidebar_position: 1
 ### EmailSeeder
 Generates random email addresses.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->email('email');
 ```
 
 ### FirstNameSeeder
 Generates first names.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->firstName('first_name');
 $seeder->firstName('first_name', 'male'); // or with optional gender parameter
 ```
 ### FullNameSeeder
 Generates full names.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->name('name');
 ```
 
 ### LastNameSeeder
 Generates last names.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->lastname('last_name');
 $seeder->lastname('last_name', 'female'); // or with optional gender parameter
 ```
@@ -39,24 +47,32 @@ Generates passwords.
 - `$max`: Maximum password length.
 
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->password('password', $min, $max);
 ```
 
 ### PhoneNumberSeeder
 Generates phone numbers.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->phoneNumber('phone');
 ```
 
 ### TitleSeeder
 Generates name titles (Mr., Dr.).
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->title('title');
 ```
 
 ### UsernameSeeder
 Generates usernames.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->username('username');
 ```
 
@@ -73,11 +89,15 @@ Generates random dates.
 
 **Usage:**  
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->date('created_at', 'Y-m-d H:i:s', '2020-01-01', '2023-12-31');
 ```
 ### TimezoneSeeder
 Generates timezones (e.g., UTC+1).
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->timezone('timezone');
 ```
 
@@ -86,6 +106,8 @@ $seeder->timezone('timezone');
 ### CompanyNameSeeder
 Generates company names.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->companyName('company');
 ```
 
@@ -94,6 +116,8 @@ $seeder->companyName('company');
 ### CurrencyCodeSeeder
 Generates currency codes (USD, EUR).
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->currencyCode('currency');
 ```
 
@@ -102,66 +126,88 @@ $seeder->currencyCode('currency');
 ### AddressSeeder
 Full address.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->address('address');
 ```
 
 ### BuildingNumberSeeder
 Generates building numbers.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->buildingNumber('building');
 ```
 
 ### CitySeeder
 Generates city names.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->city('city');
 ```
 
 ### CountrySeeder
 Generates country names.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->country('country');
 ```
 
 ### CountryCodeSeeder
 Generates country codes (e.g., PT, US).
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->countryCode('code');
 ```
 
 ### LatitudeSeeder
 Generates latitude.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->latitude('lat');
 ```
 
 ### LongitudeSeeder
 Generates longitude.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->longitude('lng');
 ```
 
 ### PostcodeSeeder
 Generates postal codes.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->postcode('zip');
 ```
 
 ### StreetAddressSeeder
 Full street address.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->streetAddress('street');
 ```
 
 ### StreetNameSeeder
 Street names.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->streetName('street_name');
 ```
 
 ### StreetSuffixSeeder
 Street suffixes (Ave, Rd, etc.).
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->streetSuffix('suffix');
 ```
 
@@ -170,36 +216,48 @@ $seeder->streetSuffix('suffix');
 ### DomainNameSeeder
 Generates domain names.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->domainName('domain');
 ```
 
 ### Ipv4Seeder
 Random IPv4 address.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->ipv4('ip');
 ```
 
 ### Ipv6Seeder
 Random IPv6 address.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->ipv6('ip');
 ```
 
 ### LocalIpv4Seeder
 Local IPv4 addresses.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->localIpv4('local_ip');
 ```
 
 ### MacAddressSeeder
 MAC addresses.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->macAddress('mac');
 ```
 
 ### UrlSeeder
 Generates URLs.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->url('website');
 ```
 
@@ -208,18 +266,24 @@ $seeder->url('website');
 ### DigitSeeder
 Single random digit (0–9).
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->digit('digit');
 ```
 
 ### DigitNotSeeder
 Digit excluding specific values.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->digitNot('digit', 4);
 ```
 
 ### DigitalNotNullSeeder
 Non-zero digits.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->digitNotNull('digit');
 ```
 
@@ -233,6 +297,8 @@ Generates float values with optional precision and range.
 
 **Usage:**  
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->float('value', 2, 10, 500);
 ```
 
@@ -245,6 +311,8 @@ Generic number generation with optional digit control.
 
 **Usage:**  
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->number('value', 5, true);
 ```
 
@@ -257,6 +325,8 @@ Generates numbers between a defined range.
 
 **Usage:**  
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->numberBetween('quantity', 1, 100);
 ```
 
@@ -265,24 +335,32 @@ $seeder->numberBetween('quantity', 1, 100);
 ### CreditCardDetailsSeeder
 Generates full credit card details.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->creditCardDetails('cc');
 ```
 
 ### CreditCardExpirationDateSeeder
 Generates expiration dates.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->creditCardExpirationDate('expiry');
 ```
 
 ### CreditCardNumberSeeder
 Valid credit card numbers.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->creditCardNumber('number');
 ```
 
 ### CreditCardTypeSeeder
 Card type (Visa, MasterCard, etc.).
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->creditCardType('type');
 ```
 
@@ -296,6 +374,8 @@ Generates valid IBANs.
 
 **Usage:**  
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->iban('iban'); // default random IBAN  
 $seeder->iban('iban', 'DE'); // IBAN for Germany  
 $seeder->iban('iban', 'FR', null, 27); // IBAN for France with length 27
@@ -304,6 +384,8 @@ $seeder->iban('iban', 'FR', null, 27); // IBAN for France with length 27
 ### SwiftBicNumberSeeder
 Generates SWIFT/BIC codes.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->swiftBicNumber('bic');
 ```
 
@@ -318,6 +400,8 @@ Picks a random value from a given array.
 
 **Usage:**  
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 // Pick random value from array
 $seeder->array('choice', ['red', 'blue', 'green']);
 
@@ -333,6 +417,8 @@ Generates a random boolean value (`true` or `false`).
 
 **Usage:**  
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 // 50% chance of true or false
 $seeder->boolean('flag');
 
@@ -349,49 +435,75 @@ Extracts values from a CSV file.
 
 **Usage:**  
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->csv('field', __DIR__ . 'data.csv', 'id');
 ```
 
 ### EmojiSeeder
 Generates emojis.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->emoji('emoji');
 ```
 
-### FileSeeder  (Needs updating)
-Reads values from a file.
+### File Seeder
 
-**Parameters:**  
-- `$source` *(string)*: The path to the source file.  
-- `$destination` *(string)*: The path where processed file data might be saved (optional, depending on implementation).  
-- `$callback` *(callable)*: A callback function to process each line or value.  
-- `$noFileCallback` *(callable)*: A callback to execute if the file does not exist.  
-- `$memoryLimit` *(string|null, optional)*: Optional memory limit for processing.
+Reads values from a file and applies logic for selection and renaming.
 
-**Usage:**  
+**Parameters:**
+- `string $field`: The name of the field.
+- `string $source`: Path to the source directory or identifier.
+- `string $destination`: Path to the destination directory or identifier.
+- `Closure|null $callback`: Optional callback to process each file.
+- `Closure|null $renameCallback`: Optional callback to rename the file.
+- `string|null $memoryLimit`: Optional memory limit for the seeding process.
 ```php
-$seeder->file('photo', __DIR__ . '\photos', storage_path('app/public/photos'), function ($file, $originalName, $row) {
-    if($row['gender'] == 'M' && (Str::charAt($originalName, 0) == 'M' || Str::charAt($originalName, 0) == 'm')) return true;
-    if($row['gender'] == 'F' && (Str::charAt($originalName, 0) == 'W' || Str::charAt($originalName, 0) == 'w')) return true;
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
+$users->file(
+    'photo',
+    __DIR__ . DIRECTORY_SEPARATOR . 'photos',
+    storage_path('app' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'photos'),
+    function ($file, $originalName, $row) {
+        if ($row['gender'] == 'M' && (Str::charAt($originalName, 0) == 'M' || Str::charAt($originalName, 0) == 'm')) {
+            return true;
+        }
+        if ($row['gender'] == 'F' && (Str::charAt($originalName, 0) == 'W' || Str::charAt($originalName, 0) == 'w')) {
+            return true;
+        }
         return false;
-    }, fn($row) => null, '128M');
+    },
+    function () {
+        return Str::random(32);
+    },
+    '128M'
+)->unique();
+
 ```
 
 ### LanguageCodeSeeder
 ISO language codes (e.g., en, pt).
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->languageCode();
 ```
 
 ### LocaleSeeder
 Locale codes (e.g., pt_PT, en_US).
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->locale('locale');
 ```
 
 ### Md5Seeder
 Generates MD5 hashes.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->md5('value');
 ```
 
@@ -403,18 +515,24 @@ Generates incrementing numbers.
 
 **Usage:**  
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->sequentialNumber('id', 100); // Starts counting from 100
 ```
 
 ### Sha1Seeder
 SHA1 hashes.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->sha1('value');
 ```
 
 ### Sha256Seeder
 SHA256 hashes.
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->sha256('value');
 ```
 
@@ -424,10 +542,13 @@ Executes raw SQL to fetch values.
 **Parameters:**  
 - `$query` *(string)*: The SQL query to execute.  
 - `$bindings` *(array, optional)*: The bindings for the SQL query.
+- `$preserveOrder` *(optional, default false)* — Whether to preserve the original order of the SQL results.
 
 **Usage:**  
 ```php
-$seeder->sql('name', 'SELECT name FROM users WHERE active = ?', [1]);
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
+$seeder->sql('name', 'SELECT name FROM users WHERE active = ?', [1], false);
 ```
 
 ### TimeSeriesSeeder  
@@ -436,13 +557,15 @@ Generates time-based sequences (e.g., for charts).
 **Parameters:**  
 - `$startDate` *(string)*: The start date for the time series.  
 - `$endDate` *(string)*: The end date for the time series.  
+- `$granularity` *(string, optional)*: Granularity of the series, defaults to `'daily'`.
 - `$entriesPerPeriod` *(callable)*: A function returning the number of entries per period.  
 - `$entryFactory` *(callable)*: A factory function to create each entry.  
 - `$deltaAvg` *(callable)*: A function to compute average delta between entries.  
-- `$granularity` *(string, optional)*: Granularity of the series, defaults to `'daily'`.
 
 **Usage:**  
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->timeSeries('date', '2023-07-08', '2025-05-10', function (DateTime $date) {
             $weekDay = $date->format('w');
             return [8, 15, 12, 14, 19, 30, 50][$weekDay];
@@ -469,6 +592,8 @@ Static or fixed value.
 
 **Usage:**  
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->value('status', 'active');
 ```
 
@@ -480,6 +605,8 @@ Picks from a weighted distribution.
 
 **Usage:**  
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->weightValues('color', ['red' => 90, 'blue' => 20, 'green' => 10]);
 ```
 
@@ -493,6 +620,8 @@ Generates a string based on a pattern, replacing `?` with random letters and `#`
 
 **Usage:**  
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->bothify('code', '??-###'); // Might generate something like 'AB-593'
 ```
 
@@ -501,6 +630,8 @@ Generates a random string by replacing `?` in the pattern with random letters (a
 
 **Usage:**
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->lexify('code', '???-???');
 ```
 
@@ -509,6 +640,8 @@ Generates a single random letter (a–z). Supports uniqueness if required.
 
 **Usage:**
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->letter('initial');
 ```
 
@@ -520,6 +653,8 @@ Generates random alphanumeric strings of a specified length. Ensures uniqueness 
 
 **Usage:**
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->randomString('token', 32);
 ```
 
@@ -531,5 +666,7 @@ Generates random text content with a character limit. Ensures uniqueness if requ
 
 **Usage:**
 ```php
+use IPLeiria\ESTG\EI\DBContextSeeder\TableSeeder;
+
 $seeder->text('description', 200);
 ```

@@ -1,26 +1,143 @@
-module.exports = {
-    title: 'DBContextSeeder Docs',
-    tagline: 'Official Documentation',
-    url: 'https://palma140.github.io', // Seu username GitHub
-    baseUrl: '/DBContextSeeder/', // Nome do repositório
-    onBrokenLinks: 'throw',
-    onBrokenMarkdownLinks: 'warn',
-    favicon: 'img/favicon.ico',
-    organizationName: 'palma140', // GitHub username
-    projectName: 'DBContextSeeder', // Nome do repo
-    trailingSlash: false,
-    presets: [
-        [
-            'classic',
-            {
-                docs: {
-                    routeBasePath: '/',
-                },
-                blog: false,
-                theme: {
-                    customCss: require.resolve('./src/css/custom.css'),
-                },
-            },
-        ],
+// @ts-check
+// `@type` JSDoc annotations allow editor autocompletion and type checking
+// (when paired with `@ts-check`).
+// There are various equivalent ways to declare your Docusaurus config.
+// See: https://docusaurus.io/docs/api/docusaurus-config
+
+import {themes as prismThemes} from 'prism-react-renderer';
+
+// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+
+/** @type {import('@docusaurus/types').Config} */
+const config = {
+  title: 'DBContextSeeder',
+  tagline: 'Flexible and powerful data seeding for Laravel — populate your tables with realistic data effortlessly.',
+  favicon: 'img/favicon.ico',
+
+  // Set the production url of your site here
+  url: 'https://palma140.github.io/',
+  // Set the /<baseUrl>/ pathname under which your site is served
+  // For GitHub pages deployment, it is often '/<projectName>/'
+  baseUrl: '/DBContextSeeder/',
+
+  // GitHub pages deployment config.
+  // If you aren't using GitHub pages, you don't need these.
+  organizationName: 'palma140', // Usually your GitHub org/user name.
+  projectName: 'DBContextSeeder', // Usually your repo name.
+
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'warn',
+
+  // Even if you don't use internationalization, you can use this field to set
+  // useful metadata like html lang. For example, if your site is Chinese, you
+  // may want to replace "en" with "zh-Hans".
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en'],
+  },
+
+  presets: [
+    [
+      'classic',
+      /** @type {import('@docusaurus/preset-classic').Options} */
+      ({
+        docs: {
+          sidebarPath: './sidebars.js',
+          // Please change this to your repo.
+          // Remove this to remove the "edit this page" links.
+        },
+        blog: {
+          showReadingTime: true,
+          feedOptions: {
+            type: ['rss', 'atom'],
+            xslt: true,
+          },
+          // Please change this to your repo.
+          // Remove this to remove the "edit this page" links.
+          // Useful options to enforce blogging best practices
+          onInlineTags: 'warn',
+          onInlineAuthors: 'warn',
+          onUntruncatedBlogPosts: 'warn',
+        },
+        theme: {
+          customCss: './src/css/custom.css',
+        },
+      }),
     ],
+  ],
+trailingSlash: false,
+  themeConfig:
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    ({
+      // Replace with your project's social card
+      image: 'img/docusaurus-social-card.jpg',
+      navbar: {
+        title: 'DBContextSeeder',
+        items: [
+          {
+            type: 'docSidebar',
+            sidebarId: 'tutorialSidebar',
+            position: 'left',
+            label: 'Documentation',
+          },          {
+            href: 'https://github.com/palma140/DBContextSeeder',
+            label: 'GitHub',
+            position: 'right',
+          },
+        ],
+      },
+      footer: {
+  style: 'dark',
+  links: [
+    {
+      title: 'Documentation',
+      items: [
+        {
+          label: 'Getting Started',
+          to: '/docs/intro',
+        },
+        {
+          label: 'Advanced Usage',
+          to: '/docs/category/-advanced-examples',
+        },
+      ],
+    },
+    {
+      title: 'Community',
+      items: [
+        {
+          label: 'GitHub',
+          href: 'https://github.com/palma140/DBContextSeeder',
+        },
+        {
+          label: 'Issues',
+          href: 'https://github.com/palma140/DBContextSeeder/issues',
+        },
+      ],
+    },
+
+    {
+      title: 'Institution',
+      items: [
+        {
+          label: 'IPLeiria',
+          href: 'https://www.ipleiria.pt',
+        },
+      ],
+    },
+        {
+      title: 'Project',
+      items: [
+        {
+          label: 'License',
+          href: 'https://github.com/palma140/DBContextSeeder/blob/main/LICENSE',
+        },
+      ],
+    },
+  ],
+  copyright: `Copyright © ${new Date().getFullYear()} Politécnico de Leiria. Built with ❤️ using Docusaurus.`,
+}
+    }),
 };
+
+export default config;
