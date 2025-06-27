@@ -3,6 +3,8 @@
 namespace IPLeiria\ESTG\EI\DBContextSeeder;
 
 use Closure;
+use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Company\CompanySeeder;
 use IPLeiria\ESTG\EI\DBContextSeeder\Seeders\Financial\CurrencyCodeSeeder;
@@ -695,19 +697,27 @@ class TableSeeder
     }
 
     /**
-     * Adds a date field seeder with optional format, start date, and end date customization.
+     * Adds a date field seeder with optional format, date range, and timezone customization.
      *
      * @param string $field The name of the field.
-     * @param string|null $format The format of the date, or null for the default format.
-     * @param string|null $startDate The start date for the range, or null for no start date.
-     * @param string|null $endDate The end date for the range, or null for no end date.
+     * @param string|null $format The format of the date (e.g., 'Y-m-d'), or null for the default.
+     * @param string|DateTimeInterface|null $startDate The start date for the range (e.g., '-10 years'), or null to use the default.
+     * @param string|DateTimeInterface|null $endDate The end date for the range (e.g., 'now'), or null to use the default.
+     * @param DateTimeZone|string|null $timezone The timezone to apply when generating dates, or null to use the default timezone.
      *
      * @return FieldSeeder The field seeder object.
      */
-    public function date(string $field, ?string $format, ?string $startDate, ?string $endDate): FieldSeeder
-    {
-        return $this->addField($field, new DateSeeder($this, $field, $format, $startDate, $endDate));
+    public function date(
+        string $field,
+        ?string $format = null,
+        string|DateTimeInterface|null $startDate = null,
+        string|DateTimeInterface|null $endDate = null,
+        DateTimeZone|string|null $timezone = null
+    ): FieldSeeder {
+        return $this->addField($field, new DateSeeder($this, $field, $format, $startDate, $endDate, $timezone));
     }
+
+
 
     /**
      * Adds a timezone field seeder.

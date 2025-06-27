@@ -81,11 +81,12 @@ $seeder->username('username');
 ### DateSeeder  
 Generates random dates.
 
-**Parameters:**  
+**Parameters:**
 - `$format` *(string|null, optional)*: The date format (e.g., `'Y-m-d'`). Default is `'Y-m-d'`.  
-  See [PHP date format reference](https://www.php.net/manual/en/datetime.format.php) for supported formats.  
-- `$startDate` *(string|null, optional)*: The start date for the range (e.g., `'2000-01-01'`). Default is `'1970-01-01'`.  
-- `$endDate` *(string|null, optional)*: The end date for the range (e.g., `'2025-12-31'`). Default is today.
+  See [PHP date format reference](https://www.php.net/manual/en/datetime.format.php) for supported formats.
+- `$startDate` *(string|DateTimeInterface|null, optional)*: The start date for the range (e.g., `'-30 years'`, `'2000-01-01'`). Default is `'-30 years'`.
+- `$endDate` *(string|DateTimeInterface|null, optional)*: The end date for the range (e.g., `'now'`, `'2025-12-31'`). Default is `'now'`.
+- `$timezone` *(DateTimeZone|string|null, optional)*: Optional timezone for the generated dates (e.g., `'Europe/Lisbon'`). Default is `null` (system default timezone).
 
 **Usage:**  
 ```php
